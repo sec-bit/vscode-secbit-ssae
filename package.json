@@ -1,0 +1,81 @@
+{
+    "name": "vscode-secbit-ssae",
+    "displayName": "vscode-secbit-ssae",
+    "description": "SECBIT Solidity Static Analysis Extension",
+    "version": "0.0.1",
+    "publisher": "SECBIT",
+    "engines": {
+        "vscode": "^1.25.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:solidity"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "configuration": {
+			"type": "object",
+			"title": "SECBIT configuration",
+			"properties": {
+				"secbit.noSMT": {
+					"type": "boolean",
+					"default": false,
+					"description": "Disable SMT-solver-related checks."
+				},
+				"secbit.enables": {
+					"type":	"array",
+					"default": [],
+					"description": "Only enable the checks in this list. Enable all checks when the list contains no valid entry."
+                },
+                "secbit.solc": {
+					"type":	"string",
+					"default": "",
+					"description": "Path to the SECBIT-extended solc. Use the default solc in PATH by default."
+				},
+                "secbit.onSave": {
+					"type":	"boolean",
+					"default": false,
+					"description": "Run SECBIT static analysis on file save."
+				}
+			}
+		},
+        "commands": [
+            {
+                "command": "secbit.analyze",
+                "title": "Run SECBIT Analysis"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "secbit.analyze",
+                "key": "ctrl+f1",
+                "mac": "cmd+f1",
+                "when": "editorTextFocus && resourceExtname == .sol"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "editorTextFocus && resourceExtname == .sol",
+                    "command": "secbit.analyze",
+                    "group": "3_preview"
+                }
+            ]    
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
