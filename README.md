@@ -249,10 +249,11 @@ This extension does not provide Solidity language support. Some other extension,
 such as [solidity-extended](https://github.com/beaugunderson/vscode-solidity-extended),
 should be installed for this extension to function properly.
 
-This extension requires a copy of the `solc` Solidity compiler with [SECBIT extensions](https://github.com/sec-bit/adelaide).
+This extension ships with a copy of the `soljson.js` Solidity compiler with [SECBIT extensions](https://github.com/sec-bit/adelaide).
+So no local `solc` binary is required by default.
+But `soljson.js` does not support SMT-based checks.
+If they are needed, a copy of the `solc` Solidity compiler with [SECBIT extensions](https://github.com/sec-bit/adelaide) built with SMT lib is required.
 It would be built from source following the same instruction as building a vanilla `solc`.
-
-We have also provided direct download links of pre-build binaries for [Linux64]() and [MacOSX]().
 
 ## Usage
 
@@ -266,13 +267,13 @@ This extension provides the following settings:
   // Only enable the checks in this list. Enable all checks when the list contains no valid entry.
   "secbit.enables": [],
 
-  // Disable SMT-solver-related checks.
+  // Disable SMT-solver-related checks. This is set to true when using soljson.
   "secbit.noSMT": false,
 
   // Run SECBIT static analysis on file save.
   "secbit.onSave": false,
 
-  // Path to the SECBIT-extended solc. Use the default solc in PATH by default.
+  // Path to the SECBIT-extended solc. Use soljson by default.
   "secbit.solc": ""
 ```
 

@@ -22,7 +22,7 @@
 				"secbit.noSMT": {
 					"type": "boolean",
 					"default": false,
-					"description": "Disable SMT-solver-related checks."
+					"description": "Disable SMT-solver-related checks. This is set to true when using soljson."
 				},
 				"secbit.enables": {
 					"type":	"array",
@@ -32,7 +32,7 @@
                 "secbit.solc": {
 					"type":	"string",
 					"default": "",
-					"description": "Path to the SECBIT-extended solc. Use the default solc in PATH by default."
+					"description": "Path to the SECBIT-extended solc. Use soljson by default."
 				},
                 "secbit.onSave": {
 					"type":	"boolean",

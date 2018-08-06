@@ -5,6 +5,7 @@
 import * as vscode from 'vscode';
 import fs = require('fs');
 import cp = require('child_process');
+import soljson = require('../solc/soljson.js');
 
 // Known issues enumeration.
 const secbitKnownIssues = {
@@ -182,6 +183,31 @@ export function activate(context: vscode.ExtensionContext) {
 
     let dc: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('solidity');
 
+    function processErrors(doc : vscode.TextDocument, errs) {
+        dc.clear();
+        // Collect diagnostics.
+        var diags : vscode.Diagnostic[] = [];
+        for(let err of errs) {
+            console.log('Processing [' + err.tag + ']');
+            var severity = vscode.DiagnosticSeverity.Information;
+            if(!!secbitKnownIssues[err.tag]) {
+                severity = secbitKnownIssues[err.tag].severity;
+            }
+            const diag = new vscode.Diagnostic(
+                new vscode.Range(
+                    Number(err.startline)-1,
+                    Number(err.startcolumn)-1,
+                    Number(err.endline)-1,
+                    Number(err.endcolumn)-1
+                ),
+                '[secbit:' + err.tag + '] ' + err.desc,
+                severity
+            );
+            diags.push(diag);
+        }
+        dc.set(doc.uri, diags);
+    }
+
     function updateDiags(doc : vscode.TextDocument) {
         if(doc.languageId != 'solidity') {
             return;
@@ -189,88 +215,105 @@ export function activate(context: vscode.ExtensionContext) {
         console.log('Started SECBIT analysis...');
         
         // Invoke solc with secbit args.
-        var args = ['-o', '/', '--overwrite'];
-        var prog = 'solc';
         let config = vscode.workspace.getConfiguration('secbit');
-        if(!!config.noSMT && config.noSMT == true) {
-            args.push('--no-smt');
-        }
+
+        var tags = [];
         if(!!config.enables) {
             for(let tag of config.enables) {
                 if(!!secbitKnownIssues[tag]) {
-                    args.push('--secbit-tag');
-                    args.push(tag);
+                    tags.push(tag);
                 } else {
                     vscode.window.showInformationMessage('Unknown check: ' + tag);
                 }
             }
         }
+
         if(!!config.solc && config.solc != "") {
-            prog = config.solc;
-        }
-        // Use active editor as input file.
-        let input = doc.uri.fsPath;
-        // Error output.
-        let output = input + ".err";
-        args.push('--secbit-warnings');
-        args.push(output);
-        args.push(input);
+            // Use the given solc.
+            var args = ['-o', '/', '--overwrite'];
         
-        const solc = cp.spawn(prog, args);
-        console.log("Running " + args.join(' '));
-        // Show error info.
-        solc.on('error', (err) => {
-            vscode.window.showInformationMessage('Failed to start ' + prog);
-        });
-        solc.stderr.on('data', (data) => {
-            vscode.window.showInformationMessage('Analysis failed:\n' + data);
-        });
-        // On finish, update diagnostics.
-        solc.on('close', (code) => {
-            console.log(`solc exited with code ${code}`);
-            if(code != 0) {
+            if(!!config.noSMT && config.noSMT == true) {
+                args.push('--no-smt');
+            }
+            for(let tag of tags) {
+                args.push('--secbit-tag');
+                args.push(tag);
+            }
+            
+            // Use active editor as input file.
+            let input = doc.uri.fsPath;
+            // Error output.
+            let output = input + ".err";
+            args.push('--secbit-warnings');
+            args.push(output);
+            args.push(input);
+            
+            const solc = cp.spawn(config.solc, args);
+            console.log("Running " + args.join(' '));
+            // Show error info.
+            solc.on('error', (err) => {
+                vscode.window.showInformationMessage('Failed to start ' + config.solc);
+            });
+            solc.stderr.on('data', (data) => {
+                vscode.window.showInformationMessage('Analysis failed:\n' + data);
+            });
+            // On finish, update diagnostics.
+            solc.on('close', (code) => {
+                console.log(`solc exited with code ${code}`);
+                if(code != 0) {
+                    if(fs.statSync(output)){
+                        fs.unlinkSync(output);
+                    }
+                    return;
+                }
+    
+                // Read errors from output file.
+                var errs = [];
+                try {
+                    var errFileContent = fs.readFileSync(output,'utf8');
+                    errs = JSON.parse(errFileContent)['secbit-warnings'];
+                } catch(e) {
+                    console.log(e);
+                }
                 if(fs.statSync(output)){
                     fs.unlinkSync(output);
                 }
-                return;
-            }
+                processErrors(doc, errs);
+                console.log('Finished processing solc output.');
+            });
+        } else {
+            // Use soljson.
+            const compileJSON =
+            soljson.cwrap(
+                'compileJSON',
+                'string',
+                [
+                    'string', //_input
+                    'number', //_optimize
+                    'number', //_isSECBIT
+                    'number', //_noSMT
+                    'number', //_asERC20
+                    'string'  //_tags
+                ]
+            );
 
-            // Read errors from output file.
-            var errs = [];
+            const result =
+                compileJSON(
+                    /*_input*/vscode.window.activeTextEditor.document.getText(),
+                    /*_optimize*/1,
+                    /*_isSECBIT*/1,
+                    /*_noSMT*/1,
+                    /*_asERC20*/0,
+                    /*_tags*/tags.join(',')
+                );
+
+            const output = JSON.parse(result);
             try {
-                var errFileContent = fs.readFileSync(output,'utf8');
-                errs = JSON.parse(errFileContent)['secbit-warnings'];
+                processErrors(doc, output['errors']);
             } catch(e) {
                 console.log(e);
             }
-            if(fs.statSync(output)){
-                fs.unlinkSync(output);
-            }
-            dc.clear();
-
-            // Collect diagnostics.
-            var diags : vscode.Diagnostic[] = [];
-            for(let err of errs) {
-                console.log('Processing [' + err.tag + ']');
-                var severity = vscode.DiagnosticSeverity.Information;
-                if(!!secbitKnownIssues[err.tag]) {
-                    severity = secbitKnownIssues[err.tag].severity;
-                }
-                const diag = new vscode.Diagnostic(
-                    new vscode.Range(
-                        Number(err.startline)-1,
-                        Number(err.startcolumn)-1,
-                        Number(err.endline)-1,
-                        Number(err.endcolumn)-1
-                    ),
-                    '[secbit:' + err.tag + '] ' + err.desc,
-                    severity
-                );
-                diags.push(diag);
-            }
-            dc.set(doc.uri, diags);
-            console.log('Finished processing solc output.');
-        });
+        }
     }
 
     context.subscriptions.push(vscode.commands.registerCommand('secbit.analyze', () => {
