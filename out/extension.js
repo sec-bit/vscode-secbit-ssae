@@ -175,7 +175,6 @@ function activate(context) {
         }
         l = l + '* ' + issue + '\n**' + secbitKnownIssues[issue].type + '**\n**' + s + '**\n\n';
     }
-    console.log(l);
     let dc = vscode.languages.createDiagnosticCollection('solidity');
     function processErrors(doc, errs) {
         dc.clear();
@@ -219,6 +218,9 @@ function activate(context) {
             for (let tag of tags) {
                 args.push('--secbit-tag');
                 args.push(tag);
+            }
+            if (config.asERC20 === true) {
+                args.push('--erc20');
             }
             // Use active editor as input file.
             let input = doc.uri.fsPath;
@@ -276,7 +278,7 @@ function activate(context) {
             /*_optimize*/ 1, 
             /*_isSECBIT*/ 1, 
             /*_noSMT*/ 1, 
-            /*_asERC20*/ 0, 
+            /*_asERC20*/ config.asERC20 === true ? 1 : 0, 
             /*_tags*/ tags.join(','));
             const output = JSON.parse(result);
             try {

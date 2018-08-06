@@ -19,6 +19,11 @@
 			"type": "object",
 			"title": "SECBIT configuration",
 			"properties": {
+				"secbit.asERC20": {
+					"type": "boolean",
+					"default": false,
+					"description": "Run ERC20-specific checks."
+				},
 				"secbit.noSMT": {
 					"type": "boolean",
 					"default": false,

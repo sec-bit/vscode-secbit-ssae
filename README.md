@@ -264,6 +264,9 @@ Copy this repository to `~/.vscode/extensions` and reload the IDE.
 This extension provides the following settings:
 
 ```javascript
+  // Run ERC20-specific checks.
+  "secbit.asERC20": false,
+
   // Only enable the checks in this list. Enable all checks when the list contains no valid entry.
   "secbit.enables": [],
 
