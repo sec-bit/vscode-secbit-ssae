@@ -101,14 +101,14 @@ Integer division.
 Conditions on ether balance are not reliable since ether could
 be forced into a contract.
 
-[Consensys: forcibly sending ether to a contract](https://consensys.github.io/smart-contract-best-practices/known_attacks/#forcibly-sending-ether-to-a-contract)
+[ConsenSys: forcibly sending ether to a contract](https://consensys.github.io/smart-contract-best-practices/known_attacks/#forcibly-sending-ether-to-a-contract)
 
 #### pull-vs-push
 `Error`
 
 Avoid DoS by using a [pull payment system](https://consensys.github.io/smart-contract-best-practices/recommendations#favor-pull-over-push-for-external-calls)
 
-[Consensys: DoS with unexpected revert](https://consensys.github.io/smart-contract-best-practices/known_attacks/#dos-with-unexpected-revert)
+[ConsenSys: DoS with unexpected revert](https://consensys.github.io/smart-contract-best-practices/known_attacks/#dos-with-unexpected-revert)
 
 #### private-modifier
 `Information`
@@ -125,7 +125,7 @@ Fallback function with a single `throw` is redundant.
 
 The DAO attack. 
 
-[Consensys: avoid state changes after external calls](https://consensys.github.io/smart-contract-best-practices/recommendations/#avoid-state-changes-after-external-calls)
+[ConsenSys: avoid state changes after external calls](https://consensys.github.io/smart-contract-best-practices/recommendations/#avoid-state-changes-after-external-calls)
 
 This check uses SMT solver.
 
@@ -134,28 +134,28 @@ This check uses SMT solver.
 
 Preferred `transfer()` over `send()` or `call.value()`.
 
-[Consensys: Be aware of the tradeoffs between send(), transfer(), and call.value()](https://consensys.github.io/smart-contract-best-practices/recommendations/#be-aware-of-the-tradeoffs-between-send-transfer-and-callvalue)
+[ConsenSys: Be aware of the tradeoffs between send(), transfer(), and call.value()](https://consensys.github.io/smart-contract-best-practices/recommendations/#be-aware-of-the-tradeoffs-between-send-transfer-and-callvalue)
 
-#### timstamp
+#### timestamp
 `Warning`
 
 `timestamp` could be manipulated by miners.
 
-[Consensys: Timestamp Dependence](https://consensys.github.io/smart-contract-best-practices/known_attacks/#timestamp-dependence)
+[ConsenSys: Timestamp Dependence](https://consensys.github.io/smart-contract-best-practices/known_attacks/#timestamp-dependence)
 
 #### tx-origin
 `Error`
 
 Avoid using `tx.origin`.
 
-[Consensys: avoid using tx.origin](https://consensys.github.io/smart-contract-best-practices/recommendations/#avoid-using-txorigin)
+[ConsenSys: avoid using tx.origin](https://consensys.github.io/smart-contract-best-practices/recommendations/#avoid-using-txorigin)
 
 #### unchecked-math
 `Error`
 
 Integer over/underflows.
 
-[Consensys: integer overflow and underflow](https://consensys.github.io/smart-contract-best-practices/known_attacks/#integer-overflow-and-underflow)
+[ConsenSys: integer overflow and underflow](https://consensys.github.io/smart-contract-best-practices/known_attacks/#integer-overflow-and-underflow)
 
 This check uses SMT solver.
 
