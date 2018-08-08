@@ -2,13 +2,26 @@
     "name": "vscode-secbit-ssae",
     "displayName": "vscode-secbit-ssae",
     "description": "SECBIT Solidity Static Analysis Extension",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "publisher": "SECBIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sec-bit/vscode-secbit-ssae"
+    },
     "engines": {
         "vscode": "^1.25.0"
     },
+    "icon": "images/logo.png",
     "categories": [
-        "Other"
+        "Programming Languages",
+        "Linters"
+    ],
+    "keywords": [
+        "solidity",
+        "ethereum",
+        "blockchain",
+        "compiler",
+        "smart contract"
     ],
     "activationEvents": [
         "onLanguage:solidity"
