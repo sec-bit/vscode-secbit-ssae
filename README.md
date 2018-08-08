@@ -1,6 +1,6 @@
 # Visual Studio Code Extension for SECBIT Solidity Static Analysis Extension
 
-This is an [Visual Studio Code](https://code.visualstudio.com/) Extension for running SECBIT
+This is an [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=SECBIT.vscode-secbit-ssae) for running SECBIT
 Solidity Static Analysis over Solidity source code.
 
 ## Features
@@ -283,6 +283,20 @@ This extension provides the following settings:
 ## Known Issues
 
 Being an static analysis tool, false positives and false negatives are unavoidable. Bug reports are welcomed.
+
+## Contact Us
+
+If you run into any issues or have suggestions for us, feel free to [create issues](https://github.com/sec-bit/vscode-secbit-ssae/issues) and pull requests.
+
+## Related Projects
+
+https://secbit.io
+
+- [Awesome Buggy ERC20 Tokens](https://github.com/sec-bit/awesome-buggy-erc20-tokens) - A Collection of Vulnerabilities in ERC20 Smart Contracts With Tokens Affected
+
+- [adelaide](https://github.com/sec-bit/adelaide) - The SECBIT Static Analysis Extension to Solidity Compiler
+
+- [Token Libraries with Proofs](https://github.com/sec-bit/tokenlibs-with-proofs) - Contains correctness proofs of token contracts wrt. given specifications and high-level properties
 
 ## License
 
