@@ -29,6 +29,10 @@ const secbitKnownIssues = {
         'severity' : vscode.DiagnosticSeverity.Error,
         'type' : 'erc20',
     },
+    'erc20-mintable' : {
+        'severity' : vscode.DiagnosticSeverity.Warning,
+        'type' : 'erc20',
+    },
     'transfer-no-revert' : {
         'severity' : vscode.DiagnosticSeverity.Error,
         'type' : 'erc20',

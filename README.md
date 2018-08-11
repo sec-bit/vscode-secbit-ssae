@@ -17,6 +17,43 @@ Triggering this command would run the SECBIT-extended `solc` and report diagnost
 
 ![result](images/result.png)
 
+## Requirements
+
+This extension does not provide Solidity language support. Some other extension, 
+such as [solidity-extended](https://github.com/beaugunderson/vscode-solidity-extended),
+should be installed for this extension to function properly.
+
+This extension ships with a copy of the `soljson.js` Solidity compiler with [SECBIT extensions](https://github.com/sec-bit/adelaide).
+So no local `solc` binary is required by default.
+But `soljson.js` does not support SMT-based checks.
+If they are needed, a copy of the `solc` Solidity compiler with [SECBIT extensions](https://github.com/sec-bit/adelaide) built with SMT lib is required.
+It would be built from source following the same instruction as building a vanilla `solc`.
+
+## Usage
+
+Copy this repository to `~/.vscode/extensions` and reload the IDE.
+
+## Extension Settings
+
+This extension provides the following settings:
+
+```javascript
+  // Run ERC20-specific checks.
+  "secbit.asERC20": false,
+
+  // Only enable the checks in this list. Enable all checks when the list contains no valid entry.
+  "secbit.enables": [],
+
+  // Disable SMT-solver-related checks. This is set to true when using soljson.
+  "secbit.noSMT": false,
+
+  // Run SECBIT static analysis on file save.
+  "secbit.onSave": false,
+
+  // Path to the SECBIT-extended solc. Use soljson by default.
+  "secbit.solc": ""
+```
+
 ## Currently Supported Checks
 
 ### ERC20 Specific
@@ -26,13 +63,26 @@ Triggering this command would run the SECBIT-extended `solc` and report diagnost
 
 [SECBIT: no-Approval](https://github.com/sec-bit/awesome-buggy-erc20-tokens/blob/master/ERC20_token_issue_list.md#b7-no-approval)
 
+#### erc20-mintable
+`Warning`
+
+Contract is mintable (The contract, or any of its base contract, contains a function with the name matching `/^_?mint.*$/`).
+
 #### erc20-no-decimals
 `Error`
+
+The contract and all of its base contract do not have a `decimals` ABI.
+
+This error only reports on a contract that is not a base contract of any other contract.
 
 [SECBIT: no-decimals](https://github.com/sec-bit/awesome-buggy-erc20-tokens/blob/master/ERC20_token_issue_list.md#b4-no-decimals)
 
 #### erc20-no-name
 `Error`
+
+The contract and all of its base contract do not have a `name` ABI.
+
+This error only reports on a contract that is not a base contract of any other contract.
 
 [SECBIT: no-name](https://github.com/sec-bit/awesome-buggy-erc20-tokens/blob/master/ERC20_token_issue_list.md#b5-no-name)
 
@@ -47,6 +97,10 @@ Triggering this command would run the SECBIT-extended `solc` and report diagnost
 
 #### erc20-no-symbol
 `Error`
+
+The contract and all of its base contract do not have a `symbol` ABI.
+
+This error only reports on a contract that is not a base contract of any other contract.
 
 [SECBIT: no-symbol](https://github.com/sec-bit/awesome-buggy-erc20-tokens/blob/master/ERC20_token_issue_list.md#b6-no-symbol)
 
@@ -241,44 +295,6 @@ Could use a more strict state-mutability specification.
 `Information`
 
 Reduce gas consumption by replacing `bytes` with `byte[]` when possible.
-
-
-## Requirements
-
-This extension does not provide Solidity language support. Some other extension, 
-such as [solidity-extended](https://github.com/beaugunderson/vscode-solidity-extended),
-should be installed for this extension to function properly.
-
-This extension ships with a copy of the `soljson.js` Solidity compiler with [SECBIT extensions](https://github.com/sec-bit/adelaide).
-So no local `solc` binary is required by default.
-But `soljson.js` does not support SMT-based checks.
-If they are needed, a copy of the `solc` Solidity compiler with [SECBIT extensions](https://github.com/sec-bit/adelaide) built with SMT lib is required.
-It would be built from source following the same instruction as building a vanilla `solc`.
-
-## Usage
-
-Copy this repository to `~/.vscode/extensions` and reload the IDE.
-
-## Extension Settings
-
-This extension provides the following settings:
-
-```javascript
-  // Run ERC20-specific checks.
-  "secbit.asERC20": false,
-
-  // Only enable the checks in this list. Enable all checks when the list contains no valid entry.
-  "secbit.enables": [],
-
-  // Disable SMT-solver-related checks. This is set to true when using soljson.
-  "secbit.noSMT": false,
-
-  // Run SECBIT static analysis on file save.
-  "secbit.onSave": false,
-
-  // Path to the SECBIT-extended solc. Use soljson by default.
-  "secbit.solc": ""
-```
 
 ## Known Issues
 
