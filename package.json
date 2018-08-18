@@ -2,7 +2,7 @@
     "name": "vscode-secbit-ssae",
     "displayName": "vscode-secbit-ssae",
     "description": "SECBIT Solidity Static Analysis Extension",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "publisher": "SECBIT",
     "repository": {
         "type": "git",
@@ -29,36 +29,36 @@
     "main": "./out/extension",
     "contributes": {
         "configuration": {
-			"type": "object",
-			"title": "SECBIT configuration",
-			"properties": {
-				"secbit.asERC20": {
-					"type": "boolean",
-					"default": false,
-					"description": "Run ERC20-specific checks."
-				},
-				"secbit.noSMT": {
-					"type": "boolean",
-					"default": false,
-					"description": "Disable SMT-solver-related checks. This is set to true when using soljson."
-				},
-				"secbit.enables": {
-					"type":	"array",
-					"default": [],
-					"description": "Only enable the checks in this list. Enable all checks when the list contains no valid entry."
+            "type": "object",
+            "title": "SECBIT configuration",
+            "properties": {
+                "secbit.asERC20": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run ERC20-specific checks."
+                },
+                "secbit.noSMT": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Disable SMT-solver-related checks. This is set to true when using soljson."
+                },
+                "secbit.enables": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Only enable the checks in this list. Enable all checks when the list contains no valid entry."
                 },
                 "secbit.solc": {
-					"type":	"string",
-					"default": "",
-					"description": "Path to the SECBIT-extended solc. Use soljson by default."
-				},
+                    "type": "string",
+                    "default": "",
+                    "description": "Path to the SECBIT-extended solc. Use soljson by default."
+                },
                 "secbit.onSave": {
-					"type":	"boolean",
-					"default": false,
-					"description": "Run SECBIT static analysis on file save."
-				}
-			}
-		},
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run SECBIT static analysis on file save."
+                }
+            }
+        },
         "commands": [
             {
                 "command": "secbit.analyze",
@@ -80,7 +80,7 @@
                     "command": "secbit.analyze",
                     "group": "3_preview"
                 }
-            ]    
+            ]
         }
     },
     "scripts": {
