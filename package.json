@@ -2,7 +2,7 @@
     "name": "vscode-secbit-ssae",
     "displayName": "vscode-secbit-ssae",
     "description": "SECBIT Solidity Static Analysis Extension",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "SECBIT",
     "repository": {
         "type": "git",
@@ -95,5 +95,8 @@
         "vscode": "^1.1.6",
         "@types/node": "^7.0.43",
         "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "url-parse": "^1.4.3"
     }
 }
